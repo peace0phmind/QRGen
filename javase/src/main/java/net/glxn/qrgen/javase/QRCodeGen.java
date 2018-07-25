@@ -15,14 +15,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class QRCode extends AbstractQRCode {
+public class QRCodeGen extends AbstractQRCode {
 
     public static final MatrixToImageConfig DEFAULT_CONFIG = new MatrixToImageConfig();
 
     protected final String text;
     protected MatrixToImageConfig matrixToImageConfig = DEFAULT_CONFIG;
 
-    protected QRCode(String text) {
+    protected QRCodeGen(String text) {
         this.text = text;
         qrWriter = new QRCodeWriter();
     }
@@ -35,39 +35,39 @@ public class QRCode extends AbstractQRCode {
      * characters.<br><br>
      * </p>
      * <p>
-     * The QRCode will have the following defaults:     <br> {size: 100x100}<br>{imageType:PNG}  <br><br>
+     * The QRCodeGen will have the following defaults:     <br> {size: 100x100}<br>{imageType:PNG}  <br><br>
      * </p>
      * Both size and imageType can be overridden:   <br> Image type override is done by calling {@link
-     * QRCode#to(ImageType)} e.g. QRCode.from("hello world").to(JPG) <br> Size override is done
+     * QRCodeGen#to(ImageType)} e.g. QRCodeGen.from("hello world").to(JPG) <br> Size override is done
      * by calling
-     * {@link QRCode#withSize} e.g. QRCode.from("hello world").to(JPG).withSize(125, 125)  <br>
+     * {@link QRCodeGen#withSize} e.g. QRCodeGen.from("hello world").to(JPG).withSize(125, 125)  <br>
      *
-     * @param text the text to encode to a new QRCode, this may fail if the text is too large. <br>
-     * @return the QRCode object    <br>
+     * @param text the text to encode to a new QRCodeGen, this may fail if the text is too large. <br>
+     * @return the QRCodeGen object    <br>
      */
-    public static QRCode from(String text) {
-        return new QRCode(text);
+    public static QRCodeGen from(String text) {
+        return new QRCodeGen(text);
     }
 
     /**
      * Creates a a QR Code from the given {@link Schema}.
      * <p>
-     * The QRCode will have the following defaults:     <br> {size: 100x100}<br>{imageType:PNG}  <br><br>
+     * The QRCodeGen will have the following defaults:     <br> {size: 100x100}<br>{imageType:PNG}  <br><br>
      * </p>
-     * @param schema the schema to encode as QRCode
-     * @return the QRCode object
+     * @param schema the schema to encode as QRCodeGen
+     * @return the QRCodeGen object
      */
-    public static QRCode from(Schema schema) {
-        return new QRCode(schema.generateString());
+    public static QRCodeGen from(Schema schema) {
+        return new QRCodeGen(schema.generateString());
     }
 
     /**
      * Overrides the imageType from its default {@link net.glxn.qrgen.core.image.ImageType#PNG}
      *
      * @param imageType the {@link net.glxn.qrgen.core.image.ImageType} you would like the resulting QR to be
-     * @return the current QRCode object
+     * @return the current QRCodeGen object
      */
-    public QRCode to(ImageType imageType) {
+    public QRCodeGen to(ImageType imageType) {
         this.imageType = imageType;
         return this;
     }
@@ -77,9 +77,9 @@ public class QRCode extends AbstractQRCode {
      *
      * @param width  the width in pixels
      * @param height the height in pixels
-     * @return the current QRCode object
+     * @return the current QRCodeGen object
      */
-    public QRCode withSize(int width, int height) {
+    public QRCodeGen withSize(int width, int height) {
         this.width = width;
         this.height = height;
         return this;
@@ -90,9 +90,9 @@ public class QRCode extends AbstractQRCode {
      * com.google.zxing.qrcode.QRCodeWriter#encode}
      *
      * @param charset the charset as string, e.g. UTF-8
-     * @return the current QRCode object
+     * @return the current QRCodeGen object
      */
-    public QRCode withCharset(String charset) {
+    public QRCodeGen withCharset(String charset) {
         return withHint(EncodeHintType.CHARACTER_SET, charset);
     }
 
@@ -101,9 +101,9 @@ public class QRCode extends AbstractQRCode {
      * {@link com.google.zxing.qrcode.QRCodeWriter#encode}
      *
      * @param level the error correction level to use by {@link com.google.zxing.qrcode.QRCodeWriter#encode}
-     * @return the current QRCode object
+     * @return the current QRCodeGen object
      */
-    public QRCode withErrorCorrection(ErrorCorrectionLevel level) {
+    public QRCodeGen withErrorCorrection(ErrorCorrectionLevel level) {
         return withHint(EncodeHintType.ERROR_CORRECTION, level);
     }
 
@@ -112,9 +112,9 @@ public class QRCode extends AbstractQRCode {
      *
      * @param hintType the hintType to set
      * @param value the concrete value to set
-     * @return the current QRCode object
+     * @return the current QRCodeGen object
      */
-    public QRCode withHint(EncodeHintType hintType, Object value) {
+    public QRCodeGen withHint(EncodeHintType hintType, Object value) {
         hints.put(hintType, value);
         return this;
     }
@@ -151,7 +151,7 @@ public class QRCode extends AbstractQRCode {
     }
 
     private File createTempSvgFile() throws IOException {
-        return createTempSvgFile("QRCode");
+        return createTempSvgFile("QRCodeGen");
     }
 
     private File createTempSvgFile(String name) throws IOException {
@@ -160,7 +160,7 @@ public class QRCode extends AbstractQRCode {
         return file;
     }
 
-    public QRCode withColor(int onColor, int offColor) {
+    public QRCodeGen withColor(int onColor, int offColor) {
         matrixToImageConfig = new MatrixToImageConfig(onColor, offColor);
         return this;
     }

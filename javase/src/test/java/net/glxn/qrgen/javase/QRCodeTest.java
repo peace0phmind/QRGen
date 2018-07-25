@@ -32,7 +32,7 @@ public class QRCodeTest {
                 .setCompany("John Doe Inc.")
                 .setPhoneNumber("1234")
                 .setWebsite("www.example.org");
-        File file = QRCode.from(johnDoe).file();
+        File file = QRCodeGen.from(johnDoe).file();
         Assert.assertNotNull(file);
     }
 
@@ -46,32 +46,32 @@ public class QRCodeTest {
                 .setCompany("John Doe Inc.")
                 .setPhoneNumber("1234")
                 .setWebsite("www.Björkelundsvägen.org");
-        File file = QRCode.from(johnDoe).file();
+        File file = QRCodeGen.from(johnDoe).file();
         Assert.assertNotNull(file);
     }
 
     @Test
     public void shouldGetBitmapFileFromText() throws Exception {
-        File file = QRCode.from("www.example.org").to(ImageType.BMP).file();
+        File file = QRCodeGen.from("www.example.org").to(ImageType.BMP).file();
         Assert.assertNotNull(file);
     }
 
     @Test
     public void shouldGetFileFromTextWithDefaults() throws Exception {
-        File file = QRCode.from("Hello World").file();
+        File file = QRCodeGen.from("Hello World").file();
         Assert.assertNotNull(file);
     }
 
     @Test
     public void shouldGetFileWithNameFromTextWithDefaults() throws Exception {
-        File file = QRCode.from("Hello World").file("Hello World");
+        File file = QRCodeGen.from("Hello World").file("Hello World");
         Assert.assertNotNull(file);
         Assert.assertTrue(file.getName().startsWith("Hello World"));
     }
 
     @Test
     public void shouldGetSTREAMFromTextWithDefaults() throws Exception {
-        ByteArrayOutputStream stream = QRCode.from("Hello World").stream();
+        ByteArrayOutputStream stream = QRCodeGen.from("Hello World").stream();
         Assert.assertNotNull(stream);
     }
 
@@ -85,31 +85,31 @@ public class QRCodeTest {
         String text = new String(chars);
         Assert.assertEquals(length, text.length());
 
-        File file = QRCode.from(text).to(ImageType.PNG).file();
+        File file = QRCodeGen.from(text).to(ImageType.PNG).file();
         Assert.assertNotNull(file);
     }
 
     @Test
     public void shouldGetFileFromTextWithImageTypeOverrides() throws Exception {
-        File jpg = QRCode.from("Hello World").to(ImageType.JPG).file();
+        File jpg = QRCodeGen.from("Hello World").to(ImageType.JPG).file();
         Assert.assertNotNull(jpg);
-        File gif = QRCode.from("Hello World").to(ImageType.GIF).file();
+        File gif = QRCodeGen.from("Hello World").to(ImageType.GIF).file();
         Assert.assertNotNull(gif);
     }
 
     @Test
     public void shouldGetFileWithNameFromTextWithImageTypeOverrides() throws Exception {
-        File jpg = QRCode.from("Hello World").to(ImageType.JPG).file("Hello World");
+        File jpg = QRCodeGen.from("Hello World").to(ImageType.JPG).file("Hello World");
         Assert.assertNotNull(jpg);
         Assert.assertTrue(jpg.getName().startsWith("Hello World"));
-        File gif = QRCode.from("Hello World").to(ImageType.GIF).file("Hello World");
+        File gif = QRCodeGen.from("Hello World").to(ImageType.GIF).file("Hello World");
         Assert.assertNotNull(gif);
         Assert.assertTrue(gif.getName().startsWith("Hello World"));
     }
 
     @Test
     public void shouldGetStreamFromText() throws Exception {
-        ByteArrayOutputStream stream = QRCode.from("Hello World").to(ImageType.PNG).stream();
+        ByteArrayOutputStream stream = QRCodeGen.from("Hello World").to(ImageType.PNG).stream();
         Assert.assertNotNull(stream);
         File tempFile = File.createTempFile("test", ".tmp");
         long lengthBefore = tempFile.length();
@@ -121,7 +121,7 @@ public class QRCodeTest {
     @Test
     public void shouldWriteToSuppliedStream() throws Exception {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        QRCode.from("Hello World").writeTo(stream);
+        QRCodeGen.from("Hello World").writeTo(stream);
 
         Assert.assertNotNull(stream);
         File tempFile = File.createTempFile("test", ".tmp");
@@ -133,9 +133,9 @@ public class QRCodeTest {
 
     @Test
     public void shouldBeAbleToOverrideDimensionsToFile() throws Exception {
-        long defaultSize = QRCode.from("Hello World").to(ImageType.PNG).file().length();
-        long defaultSize2 = QRCode.from("Hello World").to(ImageType.PNG).file().length();
-        File file = QRCode.from("Hello World").to(ImageType.PNG).withSize(250, 250).file();
+        long defaultSize = QRCodeGen.from("Hello World").to(ImageType.PNG).file().length();
+        long defaultSize2 = QRCodeGen.from("Hello World").to(ImageType.PNG).file().length();
+        File file = QRCodeGen.from("Hello World").to(ImageType.PNG).withSize(250, 250).file();
         Assert.assertNotNull(file);
         Assert.assertTrue(defaultSize == defaultSize2);
         Assert.assertTrue(defaultSize < file.length());
@@ -143,9 +143,9 @@ public class QRCodeTest {
 
     @Test
     public void shouldBeAbleToOverrideDimensionsToFileWithName() throws Exception {
-        long defaultSize = QRCode.from("Hello World").to(ImageType.PNG).file("Hello World").length();
-        long defaultSize2 = QRCode.from("Hello World").to(ImageType.PNG).file("Hello World").length();
-        File file = QRCode.from("Hello World").to(ImageType.PNG).withSize(250, 250).file("Hello World");
+        long defaultSize = QRCodeGen.from("Hello World").to(ImageType.PNG).file("Hello World").length();
+        long defaultSize2 = QRCodeGen.from("Hello World").to(ImageType.PNG).file("Hello World").length();
+        File file = QRCodeGen.from("Hello World").to(ImageType.PNG).withSize(250, 250).file("Hello World");
         Assert.assertNotNull(file);
         Assert.assertTrue(defaultSize == defaultSize2);
         Assert.assertTrue(defaultSize < file.length());
@@ -157,7 +157,7 @@ public class QRCodeTest {
         String expected = "UTF-8";
         final Object[] capture = new Object[1];
         try {
-            final QRCode from = QRCode.from("Jour férié");
+            final QRCodeGen from = QRCodeGen.from("Jour férié");
             from.setQrWriter(writerWithCapture(capture));
             from.to(ImageType.PNG).withCharset(expected).stream();
         } catch (QRGenerationException ignored) {
@@ -170,7 +170,7 @@ public class QRCodeTest {
         ErrorCorrectionLevel expected = ErrorCorrectionLevel.L;
         final Object[] capture = new Object[1];
         try {
-            final QRCode from = QRCode.from("Jour férié");
+            final QRCodeGen from = QRCodeGen.from("Jour férié");
             from.setQrWriter(writerWithCapture(capture));
             from.to(ImageType.PNG).withErrorCorrection(ErrorCorrectionLevel.L).stream();
         } catch (QRGenerationException ignored) {
@@ -185,7 +185,7 @@ public class QRCodeTest {
         for (EncodeHintType type : hintTypes) {
             final Object[] capture = new Object[1];
             try {
-                final QRCode from = QRCode.from("Jour férié");
+                final QRCodeGen from = QRCodeGen.from("Jour férié");
                 from.setQrWriter(writerWithCapture(capture));
                 from.to(ImageType.PNG).withHint(type, expected).stream();
             } catch (QRGenerationException ignored) {
@@ -196,7 +196,7 @@ public class QRCodeTest {
 
     @Test
     public void shouldColorOutput() throws IOException {
-        File file = QRCode.from("Hello World").withColor(0xFFFF0000, 0xFFFFFFAA).file();
+        File file = QRCodeGen.from("Hello World").withColor(0xFFFF0000, 0xFFFFFFAA).file();
         File tempFile = File.createTempFile("qr_", ".png");
         Files.copy(file.toPath(), new FileOutputStream(tempFile));
         System.out.println(tempFile.getAbsoluteFile());
